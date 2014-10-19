@@ -111,7 +111,7 @@ function showInitialMessages() {
  */
 function clearMessages(url) {
     $.post("/api/wall/clear", function (data) {
-        showTempResultMessage(data.result);
+        showTempResultMessage(data.result, data.alertClass || 'warning');
         showInitialMessages();
     });
 }
