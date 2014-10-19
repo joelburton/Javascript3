@@ -20,6 +20,8 @@ function initWallApplication() {
         // Reset the message container to be empty
         $("#message").val("");
     });
+
+    showInitialMessages();
 }
 
 /*
@@ -36,6 +38,7 @@ function sendMessageDataToServer(formObj, url) {
         success: function (data) {
             console.log("sendMessageDataToServer: ", data);
             showTempResultMessage(data.result);
+            showMessages(data.messages);
         }
     });
 }
@@ -68,4 +71,23 @@ function showTempResultMessage(resultMsg) {
             $(self).slideUp();
         }, 2000);
     });
+}
+
+/*
+ * Show the list of messages.
+ */
+function showMessages(msgs) {
+    var messageContainer = $("#message-container");
+    messageContainer.empty();
+    for (var i=0; i < msgs.length; i++) {
+        messageContainer.append(
+                "<li class='list-group-item'>" + msgs[i].message + "</li>");
+    }
+}
+
+/*
+ * Get initial messages
+ */
+function showInitialMessages() {
+    $.get("/api/wall/get", function (data) { showMessages(data.messages); });
 }
