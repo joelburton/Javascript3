@@ -26,7 +26,7 @@ class RemoveHTML(HTMLParser):
         self.out = self.out + data
 
 
-def wall_error(self, error):
+def wall_error(error):
     """Handle API errors.
 
         error: (string) error message
@@ -40,7 +40,7 @@ def wall_error(self, error):
     }
 
 
-def wall_list(self):
+def wall_list():
     """Get messages.
 
         returns: dictionary with messages list + result code.
@@ -52,7 +52,7 @@ def wall_list(self):
     }
 
 
-def wall_add(self, msg):
+def wall_add(msg):
     """Set a new message.
 
         msg: (string) message
@@ -77,7 +77,7 @@ def wall_add(self, msg):
     return result
 
 
-def wall_clear(self):
+def wall_clear():
     """Clear messages."""
 
     if 'wall' in session:
