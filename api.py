@@ -71,7 +71,7 @@ def wall_add(msg):
 
     session.setdefault('wall', []).append(wall_dict)
 
-    result = self.get()
+    result = wall_list()
     result["result"] = "Message Received"
 
     return result
