@@ -39,6 +39,7 @@ class Api(object):
 
         return {
             "result": error,
+            "alertClass": "danger",
         }
 
     def get(self):

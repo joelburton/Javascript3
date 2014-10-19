@@ -48,7 +48,7 @@ function sendMessageDataToServer(formObj) {
         data: $(formObj).serialize(),
         success: function (data) {
             console.log("sendMessageDataToServer: ", data);
-            showTempResultMessage(data.result);
+            showTempResultMessage(data.result, data.alertClass || 'success');
             showMessages(data.messages);
         }
     });
@@ -58,8 +58,9 @@ function sendMessageDataToServer(formObj) {
  * This is a helper function that does nothing but show a section of the
  * site (the message result) and then hide it a moment later.
  */
-function showTempResultMessage(resultMsg) {
+function showTempResultMessage(resultMsg, alertClass) {
     var notificationArea = $("#sent-result");
+    notificationArea.attr("class", "alert alert-" + alertClass);
     notificationArea.text(resultMsg);
     notificationArea.slideDown(function () {
         // In JavaScript, "this" is a keyword that means "the object this
