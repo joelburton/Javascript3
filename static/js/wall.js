@@ -21,6 +21,11 @@ function initWallApplication() {
         $("#message").val("");
     });
 
+    $("#messages-clear").click(function(e) {
+        console.log("Clearing messages.");
+        clearMessages();
+    });
+
     showInitialMessages();
 }
 
@@ -90,4 +95,14 @@ function showMessages(msgs) {
  */
 function showInitialMessages() {
     $.get("/api/wall/get", function (data) { showMessages(data.messages); });
+}
+
+/*
+ * Clear messages
+ */
+function clearMessages(url) {
+    $.post("/api/wall/clear", function (data) {
+        showTempResultMessage(data.result);
+        showInitialMessages();
+    });
 }

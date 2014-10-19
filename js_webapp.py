@@ -55,6 +55,10 @@ def wall_action(action):
             result = api.error("Your message is empty")
         else:
             result = api.set(msg)
+
+    elif action == "clear" and request.method == "POST":
+        result = api.clear()
+
     else:
         result = api.error("You did not specify a valid request method.")
 

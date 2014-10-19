@@ -61,3 +61,13 @@ class Api(object):
         result["result"] = "Message Received"
 
         return result
+
+    def clear(self):
+        """Clear messages."""
+
+        if 'wall' in session:
+            del session['wall']
+
+        return {
+            "result": "Cleared"
+        }
