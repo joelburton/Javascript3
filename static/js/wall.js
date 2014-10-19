@@ -103,7 +103,7 @@ function showMessages(msgs) {
  * Get initial messages
  */
 function showInitialMessages() {
-    $.get("/api/wall/get", function (data) { showMessages(data.messages); });
+    $.get("/api/wall/list", function (data) { showMessages(data.messages); });
 }
 
 /*
