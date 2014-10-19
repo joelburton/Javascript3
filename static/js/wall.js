@@ -88,11 +88,13 @@ function showTempResultMessage(resultMsg) {
  * Show the list of messages.
  */
 function showMessages(msgs) {
-    var messageContainer = $("#message-container");
-    messageContainer.empty();
-    for (var i=0; i < msgs.length; i++) {
-        messageContainer.append(
-                "<li class='list-group-item'>" + msgs[i].message + "</li>");
+    if (msgs) {
+        var messageContainer = $("#message-container");
+        messageContainer.empty();
+        for (var i = 0; i < msgs.length; i++) {
+            messageContainer.append(
+                    "<li class='list-group-item'>" + msgs[i].message + "</li>");
+        }
     }
 }
 
