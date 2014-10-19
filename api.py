@@ -26,63 +26,63 @@ class RemoveHTML(HTMLParser):
         self.out = self.out + data
 
 
-class Api(object):
-    """API for messages application."""
+def wall_error(self, error):
+    """Handle API errors.
 
-    def error(self, error):
-        """Handle API errors.
+        error: (string) error message
 
-            error: (string) error message
+        returns: dictionary error object.
+    """
 
-            returns: dictionary error object.
-        """
+    return {
+        "result": error,
+        "alertClass": "danger",
+    }
 
-        return {
-            "result": error,
-            "alertClass": "danger",
-        }
 
-    def get(self):
-        """Get messages.
+def wall_list(self):
+    """Get messages.
 
-            returns: dictionary with messages list + result code.
-        """
+        returns: dictionary with messages list + result code.
+    """
 
-        return {
-            "result": "OK",
-            "messages": session.setdefault('wall', DEFAULT_MESSAGES),
-        }
+    return {
+        "result": "OK",
+        "messages": session.setdefault('wall', DEFAULT_MESSAGES),
+    }
 
-    def set(self, msg):
-        """Set a new message.
 
-            msg: (string) message
+def wall_add(self, msg):
+    """Set a new message.
 
-            returns: dictionary with messages list + result code.
-        """
+        msg: (string) message
 
-        # Parse out HTML
-        parser = RemoveHTML()
-        parser.feed(msg)
-        msg = parser.out
+        returns: dictionary with messages list + result code.
+    """
 
-        wall_dict = {
-            "message": msg,
-        }
+    # Parse out HTML
+    parser = RemoveHTML()
+    parser.feed(msg)
+    msg = parser.out
 
-        session.setdefault('wall', []).append(wall_dict)
+    wall_dict = {
+        "message": msg,
+    }
 
-        result = self.get()
-        result["result"] = "Message Received"
+    session.setdefault('wall', []).append(wall_dict)
 
-        return result
+    result = self.get()
+    result["result"] = "Message Received"
 
-    def clear(self):
-        """Clear messages."""
+    return result
 
-        if 'wall' in session:
-            del session['wall']
 
-        return {
-            "result": "Cleared"
-        }
+def wall_clear(self):
+    """Clear messages."""
+
+    if 'wall' in session:
+        del session['wall']
+
+    return {
+        "result": "Cleared"
+    }
