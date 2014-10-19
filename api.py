@@ -8,12 +8,22 @@ to use client-side session systems, this stores things there.
 
 
 from flask import session
+from HTMLParser import HTMLParser
 
 # So that you can play with the `get` API, we return a single
 # test message as the default.
 DEFAULT_MESSAGES = [
     {'message': 'Welcome! (this is the built-in first message)'},
 ]
+
+
+class RemoveHTML(HTMLParser):
+    """Parser that ignores start and end tags and just handles data."""
+
+    out = ""
+
+    def handle_data(self, data):
+        self.out = self.out + data
 
 
 class Api(object):
@@ -49,6 +59,11 @@ class Api(object):
 
             returns: dictionary with messages list + result code.
         """
+
+        # Parse out HTML
+        parser = RemoveHTML()
+        parser.feed(msg)
+        msg = parser.out
 
         wall_dict = {
             "message": msg,
