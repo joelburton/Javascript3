@@ -2,63 +2,58 @@ $(document).ready(function () {
     // Normally, JavaScript runs code at the time that the <script>
     // tags loads the JS. By putting this inside a jQuery $(document).ready()
     // function, this code only gets run when the document finishing loading.
-    initWallApplication();
+
+    $("#message-form").submit(handleFormSubmit);
+    $("#messages-clear").click(handleClearMessages);
+
+    getMessages();  // Get initial messages
 });
 
+
 /**
- * The init function is run once the document is
- * completely loaded (and drunk).
+ * Handle submission of the form.
  */
-function initWallApplication() {
-    $("#message-form").submit(function (e) {
-        e.preventDefault();
+function handleFormSubmit(evt) {
+    evt.preventDefault();
 
-        console.log("Submitting new message.");
-        sendMessageDataToServer(this);
+    var textArea = $("#message");
+    var msg = textArea.val();
 
-        // Reset the message container to be empty
-        $("#message").val("");
+    console.log("handleFormSubmit: ", msg);
+    addMessage(msg);
 
-        // Temporarily disable sending
-        $("#message-send").prop("disabled", true);
-        setTimeout(function() {
-            $("#message-send").prop("disabled", false);
-        }, 5000)
-        
-    });
+    // Reset the message container to be empty
+    textArea.val("");
 
-    $("#messages-clear").click(function(e) {
-        console.log("Clearing messages.");
-        clearMessages();
-    });
-
-    showInitialMessages();
+    // Temporarily disable sending
+    $("#message-send").prop("disabled", true);
+    setTimeout(function() {
+        $("#message-send").prop("disabled", false);
+    }, 5000)
 }
 
-/*
- * This function makes the AJAX call to the server
- * and passes the message to it.
+
+/**
+ * Makes AJAX call to the server and the message to it.
  */
-function sendMessageDataToServer(formObj) {
-    // Send the message data to the server to be stored
-    $.ajax({
-        dataType: "json",
-        url: "/api/wall/add",
-        type: 'POST',
-        data: $(formObj).serialize(),
-        success: function (data) {
-            console.log("sendMessageDataToServer: ", data);
-            showTempResultMessage(data.result, data.alertClass || 'success');
+function addMessage(msg) {
+    $.post(
+        "/api/wall/add",
+        {'m': msg},
+        function (data) {
+            console.log("addMessage: ", data);
+            displayResultStatus(data.result, data.alertClass || 'success');
             showMessages(data.messages);
         }
-    });
+    );
 }
 
-/*
+
+/**
  * This is a helper function that does nothing but show a section of the
  * site (the message result) and then hide it a moment later.
  */
-function showTempResultMessage(resultMsg, alertClass) {
+function displayResultStatus(resultMsg, alertClass) {
     var notificationArea = $("#sent-result");
     notificationArea.attr("class", "alert alert-" + alertClass);
     notificationArea.text(resultMsg);
@@ -85,7 +80,8 @@ function showTempResultMessage(resultMsg, alertClass) {
     });
 }
 
-/*
+
+/**
  * Show the list of messages.
  */
 function showMessages(msgs) {
@@ -94,24 +90,26 @@ function showMessages(msgs) {
         messageContainer.empty();
         for (var i = 0; i < msgs.length; i++) {
             messageContainer.append(
-                    "<li class='list-group-item'>" + msgs[i].message + "</li>");
+                "<li class='list-group-item'>" + msgs[i].message + "</li>");
         }
     }
 }
 
-/*
- * Get initial messages
+
+/**
+ * Get messages from server and display
  */
-function showInitialMessages() {
+function getMessages() {
     $.get("/api/wall/list", function (data) { showMessages(data.messages); });
 }
 
-/*
- * Clear messages
+
+/**
+ * Handle clearing of messages
  */
-function clearMessages(url) {
+function handleClearMessages(evt) {
     $.post("/api/wall/clear", function (data) {
-        showTempResultMessage(data.result, data.alertClass || 'warning');
-        showInitialMessages();
+        displayResultStatus(data.result, data.alertClass || 'warning');
+        getMessages();
     });
 }
