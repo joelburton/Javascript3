@@ -18,6 +18,13 @@ function initWallApplication() {
 
         // Reset the message container to be empty
         $("#message").val("");
+
+        // Temporarily disable sending
+        $("#message-send").prop("disabled", true);
+        setTimeout(function() {
+            $("#message-send").prop("disabled", false);
+        }, 5000)
+        
     });
 
     $("#messages-clear").click(function(e) {
